@@ -1,0 +1,64 @@
+\documentstyle[11pt]{article}
+\setlength{\topmargin}{-1.01in}
+\setlength{\footheight}{-.5in}
+\setlength{\textheight}{10.in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{-0.0in}
+
+\begin{document}
+ 
+\hrule 
+\vspace{.1in}
+\noindent{ECS130 Homework Assignment \#4
+\hfill {\bf Due: 4:00pm, March 13, 2017} 
+\vspace{.1in}
+\hrule
+
+\begin{enumerate} 
+
+\item Consider the following cubic polynomial
+\[
+p(x) = 816 x^3 - 3835 x^2 + 6000 x  - 3125.  
+\] 
+It has three three closely spaced roots: $25/15, 25/16, 25/17$ 
+
+(a) Plot $p(x)$ for $1.43 \leq x \leq 1.71$. 
+Show the location of the three roots. 
+
+(b) Starting with the interval [1,2], what does the bisection method do? 
+
+(b) Starting with $x_0 = 1.5$, what does Newton's method do? 
+
+(c) Starting with $x_0 = 1$ and $x_1 = 2$, what does the secant
+metod do? 
+
+\item Investigate the behavior of the secant method on the function
+\[
+f(x) = \mbox{sign}(x-2) \sqrt{|x - 2|} 
+\] 
+{\em Hint: start from ``Example Newton 2'' from our class website.} 
+
+\item Let 
+\[
+f(x_1,x_2) = \frac{1}{2}(x^2_1 - x_2)^2 + \frac{1}{2}(1-x_1)^2
+\] 
+
+(a) What is the minimizer of $f(x_1,x_2)$? 
+
+(b) Compute one iteration of Newton's method for minimizing
+$f(x_1,x_2)$ starting from the point $(2,2)$. Is this a good step? 
+
+\item Let 
+\[
+f(x_1,x_2) = \frac{1}{2}x^2_1 + \frac{9}{2}x^2_2. 
+\] 
+It's easy to see that the minimizer is $x_{\ast} = (0,0)$
+
+(a) Derive the steepest descent method for finding the minimzer of 
+of $f(x)$. 
+
+(b) Compute the first four iterations starting from the point $(9,1)$.
+
+\end{enumerate} 
+
+\end{document} 

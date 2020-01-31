@@ -1,0 +1,190 @@
+\documentclass[11pt]{article}
+\setlength{\topmargin}{-1in}
+\setlength{\textheight}{9.2in}
+\setlength{\textwidth}{6.8in}
+\setlength{\oddsidemargin}{-0.2in}
+
+%------------- local macro ---------------
+\def\fl{\mbox{\rm fl}}
+
+\newcommand{\twobytwo}[4]{
+       \left[ \begin{array}{cc}
+                #1 & #2  \\
+                #3 & #4
+               \end{array} \right] }
+\newcommand{\twobyone}[2]{
+       \left[ \begin{array}{cc}
+                #1   \\
+                #2
+               \end{array} \right] }
+
+%--------------------------
+
+
+\begin{document}
+
+\hrule
+\bigskip 
+\noindent {\large\bf ECS130 Scientific Computation \hfill 
+Handout B\hfill January 13, 2017}
+\bigskip 
+\hrule
+
+\begin{enumerate}
+\item Gaussian elimination = LU factorization 
+      $$A = LU.$$ 
+      where $L$ is a unit lower triangular matrix and $U$ a upper 
+      triangular matrix. 
+
+\item Not all matrices have the LU factorization. For example,  
+%     The LU factorization can fail on nonsingular matrices, 
+$$
+A = \left[ \begin{array}{ccc}
+            0 & 1 & 0 \\
+            0 & 2 & 1 \\
+            2 & 3 & 1 \\
+           \end{array} \right] \neq LU.
+$$
+
+\item A {\em permutation matrix} $P$ is an identity matrix with permuted rows.
+
+Let $P, P_1, P_2$ be $n\times n$ permutation matrices, 
+and $X$ be an $n \times n$ matrix. Then
+\begin{itemize}
+\item $P^{T} P  = I$, i.e., $P^{-1} = P^T$.
+\item $\det(P) = \pm 1$.
+\item $P_1P_2$ is also a permutation matrix.
+\item $PX$ is the same as $X$ with its rows permuted.
+\item $XP$ is the same as $X$ with its columns permuted.
+\item $P_1 XP_2 $ reorders both rows and columns of $X$.
+\end{itemize}
+
+\item The need of pivoting, {\em mathematically}
+
+The LU factorization can fail on nonsingular matrices, see the 
+above example. But by exchanging the first and third rows, we get
+$$
+P A = \left[ \begin{array}{ccc}
+            2 & 3 & 1  \\
+            0 & 2 & 1 \\
+            0 & 1 & 0  \\
+           \end{array} \right]
+=  \left[ \begin{array}{ccc}
+            1 & 0 & 0  \\
+            0 & 1 & 0 \\
+            0 & \frac12 & 1  \\
+           \end{array} \right]
+    \left[ \begin{array}{ccc}
+            2 & 3 & 1  \\
+            0 & 2 & 1 \\
+            0 & 0 & -\frac12  \\
+           \end{array} \right] := L U. 
+$$
+This avoids ``the breakdown'' in the elimination process. 
+
+\item The above simple
+      observation is the basis for LU factorization with pivoting.  
+ 
+{\bf Theorem.} 
+If $A$ is nonsingular, then there exist permutations $P$, 
+a unit lower triangular matrix $L$, and a nonsingular upper triangular 
+matrix $U$ such that 
+\[
+P A = LU. 
+\] 
+%If we choose $P_2 = I$ and $P_1$ so that $a_{ii}$
+%is the largest entry in absolute value in its column
+%in the remaining matrix.
+%This is called {\bf LU with partial (column) pivoting}. 
+%If we choose $P_2$ and $P_1$ so that $a_{ii}$
+%is the largest entry in absolute value in the
+%whole remainning matrix. This is called {\bf LU with complete pivoting}. 
+
+\item Function {\tt lutx.m} %and demo of LU process {\tt lugui.m}
+
+\item Solving $Ax = b$ using the LU factorization 
+\begin{tabbing}
+m\= (nr)ss\=ijkl\=bbb\=ccc\=ddd\= \kill
+%\> {\sc Algorithm for Solving $Ax = b$ by Gaussian elimination with partial
+%pivoting} \\
+\>1.\> Factorize $A$ into $PA = LU$  \\
+%             where $P$: permutation,
+%             $L$: unit lower triangular,
+%             $U$: upper triangular  \\
+\>2.\>  Permute the entries of $b$: $b := P b$.  \\
+\>3.\> Solve $L (Ux) = b$ for $Ux$ by forward substitution: \\
+\>  \> \>    $Ux = L^{-1} b$.  \\
+\>4.\>  Solve $Ux = L^{-1} b$ for $x$ by back substitution: \\
+\>  \> \>    $x = U^{-1}( L^{-1} b)$.
+\end{tabbing}
+
+\item Function {\tt bslashx0.m}
+
+\item The need for pivoting, {\em numerically}
+
+Let us apply LU factorization without pivoting to 
+$$A = \left[\begin{array}{cc} .0001 & 1\\ 1 & 1\end{array}\right]
+= \left[\begin{array}{cc} 10^{-4} & 1\\  1 & 1\end{array}\right]
+= L U = \left[\begin{array}{cc} 1 &   \\  l_{21} & 1\end{array}\right]
+  \left[\begin{array}{cc} u_{11} & u_{12} \\  & u_{22} \end{array}\right]
+$$
+in three decimal-digit floating point arithmetic. We obtain 
+\begin{eqnarray*}
+{L} &=&\left[\begin{array}{cc} 1 & 0 \\ \fl(1/10^{-4})& 1\end{array}\right]
+         = \left[\begin{array}{cc} 1 & 0 \\ 10^{4}& 1\end{array}\right], \\
+{U} &=&\left[\begin{array}{cc} 10^{-4} & 1\\  &\fl(1-10^4\cdot 1)
+           \end{array}\right]
+         = \left[\begin{array}{cc} 10^{-4} & 1\\  & -10^4 
+           \end{array}\right],
+\end{eqnarray*}
+so 
+$${LU} =\left[\begin{array}{cc} 1 & 0 \\ 10^4 & 1\end{array}\right]	
+           \left[\begin{array}{cc} 10^{-4} & 1\\  &-10^4\end{array}\right]
+          =\left[\begin{array}{cc} 10^{-4} & 1\\  1 & 0\end{array}\right]
+          \not\approx A,
+$$
+where the original $a_{22}$ has been entirely ``lost" from the computation 
+by subtracting $10^4$ from it. In fact, we would have gotten the same ${\tt LU}$ 
+factors whether $a_{22}$ had been $1, 0, -2$, or any number such that 
+$\fl(a_{22}- 10^4)=-10^4$. Since the algorithm proceeds to work only 
+with ${L}$ and ${U}$, it will get the same answer for all these 
+different $a_{22}$, which correspond to completely different $A$ and 
+so completely different $x = A^{-1}b$; there is no way to guarantee an 
+accurate answer. This is called {\em numerical instability}. $L$  and 
+$U$ are not the exact
+factors of a matrix close to $A$. 
+
+Let us see what happens when we go on to solve 
+$Ax = [1, 2]^T$ for $x$ using this LU  factorization. The correct answer 
+is $x \approx [1,1]^T$. Instead we get the following. Solving 
+$${L}y = \twobyone{1}{2}
+\;\; \Rightarrow y_1=\fl(1/1)=1 \;\; \mbox{and} \;\; 
+y_2=\fl(2-10^4\cdot 1)=-10^4.$$ 
+Note that the value 2 has been ``lost" by 
+subtracting $10^4$ from it. Solving 
+$${U}x = y = \twobyone{1}{-10^4} \;\; \Rightarrow \;\;
+\hat x_2 = \fl((-10^4)/(-10^4)) = 1 \;\; \mbox{and} \;\;
+\hat x_1 = \fl((1 - 1)/10^{-4}) = 0,$$ a completely erroneous solution.
+
+On the other hand, the LU factorization with partial pivoting 
+would have reversed the order of the two equations 
+before proceeding. You can confirm that we get 
+$$PA = LU,$$ 
+where 
+\[
+P = \twobytwo{0}{1}{1}{0}, \;\; 
+L =\left[\begin{array}{cc} 1 & 0 \\ \fl(.0001/1) & 1\end{array}\right]
+         = \left[\begin{array}{cc} 1 & 0 \\ .0001 & 1\end{array}\right], \;\;
+\]
+and
+\[
+U =\left[\begin{array}{cc} 1 & 1\\  &\fl(1-.0001\cdot 1)
+           \end{array}\right]
+         = \left[\begin{array}{cc} 1 & 1\\  & 1 \end{array}\right]. 
+\] 
+The computed LU approximates $A$ very accurately. 
+As a result, the computed solution $x$ is also perfect!
+
+\end{enumerate}
+
+\end{document} 

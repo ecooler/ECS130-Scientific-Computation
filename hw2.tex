@@ -1,0 +1,129 @@
+\documentstyle[11pt]{article}
+\setlength{\topmargin}{-1.01in}
+\setlength{\footheight}{-.5in}
+\setlength{\textheight}{10.in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{-0.0in}
+
+\begin{document}
+ 
+\hrule 
+\vspace{.1in}
+\noindent{ECS130 Homework Assignment \#2
+\hfill {\bf Due: 4:00pm, Feburary 3, 2017} 
+\vspace{.1in}
+\hrule
+
+\begin{enumerate} 
+
+\item A real symmetric matrix $A = A^T$ is {\em positive definite} if any of the following
+equivalent conditions hold: 
+\begin{itemize} 
+\item The {\em quadratic form} $x^T A x > 0$ for all nonzero vectors $x$. 
+\item All {\em determinants} formed from submatrices of any order centered on 
+the diagonal of $A$ are positive.  
+\item All {\em eigenvalues} of $A$ are positive.  
+\item There is a lower triangular matrix $L$ such that $A = L L^T$, called 
+Cholesky decomposition of $A$. 
+\end{itemize} 
+As you can see, the best way to check the positive definiteness is with 
+Cholesky decomposition. 
+
+(a) Let $n = 3$ and write the formulas for computing
+the entries $\ell_{ij}$ of $L$ for a given $3 \times 3$ symmetric
+positive definite matrix $A$. 
+
+(b) Use the observations in (a) to derive formulas
+to compute the Cholesky decomposition for an 
+$n\times n$ symmetric positive definite (spd) matrix $A$. 
+
+(c) Program your formulas to compute the Cholesky decomposition 
+of an $n\times n$ spd matrix $A$. Check the correctness of your program
+by comparing with MATLAB's built-in function {\tt chol} for the matrices 
+$A = (a_{ij})$ with $a_{ij}=\frac{1}{i+j-1}$ with $n = 3, 4, 5$. 
+
+\item Read section 2.9, and present your error analysis for the two 
+``computed'' solutions
+$\widehat x_1 = 
+\left[ \begin{array}{r}
+1.01 \\ 
+1.01 \\ 
+\end{array} \right]$ and 
+$\widehat x_2 = 
+\left[ \begin{array}{r}
+20.97 \\ 
+-18.99 \\ 
+\end{array} \right]$ 
+of the linear system of equations 
+\[
+\left[ \begin{array}{rr}
+1000 & 999 \\ 
+999  & 998 \\ 
+\end{array} \right] x = 
+\left[ \begin{array}{r}
+1999  \\ 
+1997 \\ 
+\end{array} \right].
+\] 
+
+\item Assume you have a base-2 computer that stores floating-point
+numbers using a 6 bit normalized mantissa and a 4 bit
+exponent, and a sign bit for each.
+
+(a) For this machine, what is machine precision?
+
+(b) What is the smallest positive normalized number that can be
+represented in this machine?
+
+\item Consider the following program
+\vspace{-.1in}
+\begin{verbatim} 
+    x = 1; 
+    delta = 1 / 2^(53); 
+    for j = 1 : 2^(20),
+        x = x + delta; 
+    end
+\end{verbatim}
+\vspace{-.2in}
+By mathematical reasoning, what is the expected final value of {\tt x}?
+Use your knowledge of floating-point arithemtic to predict what it actually is. 
+Verify by running the program and explain the result. 
+
+\item Using mathematical reasoning, we know that for any positive number $x$, 
+$2x$ is a number greater than $x$. Is this true of floating-point numbers? 
+Run the following program and explain your result
+\vspace{-.1in}
+\begin{verbatim}  
+    x = 1; 
+    twox = 2*x; 
+    k = 0; 
+    while (twox > x)
+        x = twox; 
+        twox = 2*x; 
+        k = k + 1;  
+    end
+\end{verbatim}
+
+\item The polynomial $p_1(x) = (x-1)^6$ has the value
+zero at $x = 1$ and is positive elsewhere. The expanded
+form of the polynomial
+$$p_2(x) = x^6 - 6x^5 + 15x^4 - 20 x^3 + 15x^2 - 6x + 1,$$
+is mathematically equivalent. Plot $p_1(x)$ and $p_2(x)$
+for 101 equally spaced points in the interval $[0.995,1.005]$.
+Explain the plots.
+(you should evaluate the polynomial $p_2(x)$ by Horner's rule).
+
+\item (a) Write a MATLAB function that computes the two roots of
+a quadratic polynomial \linebreak $q(x) = x^2 + b x + c$ with  good
+precision.
+
+(b) Compare your computed results with MATLAB's built-in function
+{\tt roots([a b c])} for the following set of data:
+\begin{itemize}
+\item[1)] $b =-56, c = 1$
+
+\item[2)] $b = -10^8, c = 1$.
+\end{itemize}
+
+\end{enumerate} 
+\end{document} 

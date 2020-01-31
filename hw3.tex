@@ -1,0 +1,146 @@
+\documentstyle[11pt]{article}
+\setlength{\topmargin}{-1.01in}
+\setlength{\footheight}{-.5in}
+\setlength{\textheight}{10.in}
+\setlength{\textwidth}{6.5in}
+\setlength{\oddsidemargin}{-0.0in}
+
+\begin{document}
+ 
+\hrule 
+\vspace{.1in}
+\noindent{ECS130 Homework Assignment \#3
+\hfill {\bf Due: 4:00pm, Feburary 17, 2017} 
+\vspace{.1in}
+\hrule
+
+\begin{enumerate} 
+\item Prove that interpolating polynomial is unique. That is 
+$P_n(x)$ and $Q_n(x)$ are two polynomials withe degree less than $n$
+that agree at $n$ distinct points, then they agree at all points. 
+
+\item (a) Interpolate the following data by each of the interpolants
+{\tt polyinterp}, {\tt piecelin}, {\tt pchiptx} and {\tt splinetx}. 
+Plot the results for $-1 \leq x \leq 1$: 
+\begin{verbatim} 
+      x      y
+  -1.00     -1.0000
+  -0.96     -0.1512 
+  -0.65      0.3860
+   0.10      0.4802
+   0.40      0.8838
+   1.00      1.0000
+\end{verbatim} 
+(b) What are values of each of the four interpolants at $x = -0.3$? 
+Which of these values do you prefer? Why? 
+
+(c) The data were actually generated from a low-degree polynomial with integer
+coefficient. What is that polynomial? 
+
+
+\item Make a plot of your favorite object. 
+Start with
+\begin{verbatim} 
+         figure('position', get(0,'screensize'))
+         axis('position',[0 0 1 1])
+         [x,y] = ginput; 
+\end{verbatim} 
+Place your favorite object on the computer screen. Use the mouse to select a few 
+dozen points outlining your object. Terminate the {\tt ginput} with a carriage 
+return.  
+
+Now think of {\tt x} and {\tt y} as two functions of an independent variable
+that goes from one to the number of points you collected. You can interpolate
+both functions no finer grid and plot the result with
+\begin{verbatim}  
+          n = length(x); 
+          s = (1:n)';
+          t = (1:0.05:n)';
+          u = splinetx(s,x,t); 
+          v = splinetx(s,y,t); 
+          clf reset
+          plot(x,y,'.',u,v,'-'); 
+\end{verbatim}  
+Do the same thing with {\tt pchiptx}. Which do you prefer? 
+
+\item The M-file {\tt rungeinterp.m} provides an experiment with a famous
+polynomial interpolation problem due to Carl Runge. Let
+\[
+f(x) = \frac{1}{1 + 25 x^2}, 
+\] 
+and let $P_n(x)$ denote the polynomial of degree $n-1$ that interpolates 
+$f(x)$ at $n$ equally spaced points on the interview $-1 \leq x \leq 1$. Runge 
+asked whether, as $n$ increases, $P_n(x)$ converges to $f(x)$. 
+The answer is yes for some $x$, but no for others. 
+Find for what $x$, does $P_n(x) \rightarrow f(x)$ as $n \rightarrow \infty$? 
+
+\newpage
+\item Ranking sport teams. Suppose we
+have four college teams, call T1, T2, T3 and T4. These four teams
+play each other with the following outcomes: 
+\begin{itemize} 
+\item T1 beats T2 by 4 points: 21 to 17.
+\item T3 beats T1 by 9 points: 27 to 18.
+\item T1 beats T4 by 6 points: 16 to 10.
+\item T3 beats T4 by 3 points: 10 to 7.
+\item T2 beats T4 by 7 points: 17 to 10.
+\end{itemize} 
+To determine ranking points $r_1, r_2, r_3, r_4$ for each team, we do a least
+squares fit to the overdetermined system: 
+\begin{eqnarray*} 
+r_1 - r_2 & = & 4, \\
+r_3 - r_1 & = & 9, \\ 
+r_1 - r_4 & = & 6, \\ 
+r_3 - r_4 & = & 3, \\ 
+r_2 - r_4 & = & 7. 
+\end{eqnarray*} 
+In addition, we fix the total number of ranking points, i.e., 
+$r_1 + r_2 + r_3 + r_4 = 100$. Find the values of $r_1, r_2, r_3, r_4$
+that most closely satisfy these equations, and based on your results rank the 
+four teams.\footnote{This method of ranking sport teams is a simplification of one
+introduced by Ke Massey in 1997. It has evolved into a part of the famous 
+BCS (Bowl Championship Series) model for ranking college football teams and is one 
+factor in determining which teams play in bowl games.}
+
+\item Find the polynomial of degree 10
+\[
+p(t) = \beta_1 t^{10} + \beta_2 t^{9} + \cdots + \beta_{10}t + \beta_{11}  
+\]
+that best fits the function
+$f(t) = \cos(4t)$ at equally-spaced point $t$ between 0 and 1.
+Set up the design matrix $X$ and right-hand side  vector $y$, and
+determine the polynomial coefficients $\beta = (\beta_1, \ldots, \beta_{11})$
+in two different ways:
+
+(a) By solving the normal equation $X^T X \beta = X^T y$.
+This can be done in MATLAB by typing ${\tt beta} = {\tt (X'*X)}\setminus{\tt(X'*y)}$
+
+(b) By using the MATLAB backslash command ${\tt beta} = {\tt X}\setminus {\tt y}$
+(which uses a QR decomposition).
+
+Print the results to 16 digits (using {\tt format long e}) and comment on
+the difference you see. 
+{\em Note: you can compute the condition number using 
+MATLAB built-in function {\tt cond}.}
+
+\item In {\tt censusgui.m}, change the 1950 population from 150.697 million
+to 50.697 million. The produces an extreme {\tt outliner} in the data.
+Which models are the most affected by this outliner? which models are
+least affected?
+
+\item Let $x = [9,2,6]^T$.
+
+(a) Find the Householder reflection $H$ that transforms $x$ into
+\[
+H x = \left[ \begin{array}{c}
+-11  \\ 0 \\ 0 \end{array} \right]. 
+\]
+(b) Find nonzero vectors $u$ and $v$ that satisfy
+\begin{eqnarray*}  
+H u & = & -u \\ 
+H v & = & v  
+\end{eqnarray*}
+
+\end{enumerate} 
+
+\end{document} 
